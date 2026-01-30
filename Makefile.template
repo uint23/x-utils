@@ -1,0 +1,26 @@
+CC ?= cc
+OUT = template
+SRC = source/*.c
+
+# OpenBSD paths
+FT2I = -I/usr/include/freetype2
+OBSDL = -L/usr/X11R6/lib
+OBSDI = -I/usr/X11R6/include -I/usr/X11R6/include/freetype2 
+
+CPPFLAGS = $(OBSDI) $(FT2I)
+CFLAGS = -std=c99 -pedantic -Wall -Wextra -O2 -fdiagnostics-color=always
+LDFLAGS = $(OBSDL) -Iinclude/
+LDLIBS = -lX11 -lXft -lfontconfig
+LINE = $(CC) $(CPPFLAGS) $(CFLAGS) $(SRC) -o $(OUT) $(LDFLAGS) $(LDLIBS)
+
+all:
+	$(LINE)
+
+clean:
+	rm -f $(OUT)
+
+compile_flags:
+	rm -f compile_flags.txt
+	for f in $(LINE); do echo $$f >> compile_flags.txt; done
+
+.PHONY: all clean compile_flags
